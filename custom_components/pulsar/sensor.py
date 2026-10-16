@@ -121,8 +121,7 @@ class PulsarSensorEntity(BasePulsarEntity, SensorEntity):
             f"{super().unique_id}.{description.key}"
         )
         self._attr_unique_id = internal_unique_id
-        self.entity_id = internal_unique_id
-
+   
     @property
     def native_value(self) -> StateType:
         """Return the value reported by the sensor."""
