@@ -10,10 +10,7 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import (
-    UnitOfTemperature,
-    UnitOfVolume,
-)
+from homeassistant.const import UnitOfVolume
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -23,8 +20,6 @@ from . import HomeAssistantPulsarData
 
 from .const import (
     DATA_KEY_CURRENT_WATER_CONSUMPTION_CH1,
-    DATA_KEY_SYSTEM_TIME,
-    DATA_KEY_DEVICE_TEMPERATURE,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
     PULSAR_DISCOVERY_NEW
@@ -55,21 +50,6 @@ SENSORS: dict[str, tuple[PulsarSensorEntityDescription, ...]] = {
             native_unit_of_measurement=UnitOfVolume.LITERS,
             has_entity_name=True
         ),
-        PulsarSensorEntityDescription(
-            key=DATA_KEY_SYSTEM_TIME,
-            name="System time",
-            translation_key=DATA_KEY_SYSTEM_TIME,
-            has_entity_name=True
-        ),
-        PulsarSensorEntityDescription(
-            key=DATA_KEY_DEVICE_TEMPERATURE,
-            name="Temperature of meter",
-            translation_key=DATA_KEY_DEVICE_TEMPERATURE,
-            device_class=SensorDeviceClass.TEMPERATURE,
-            state_class=SensorStateClass.MEASUREMENT,
-            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-            has_entity_name=True
-        )
     )
 }
 
@@ -121,7 +101,7 @@ class PulsarSensorEntity(BasePulsarEntity, SensorEntity):
             f"{super().unique_id}.{description.key}"
         )
         self._attr_unique_id = internal_unique_id
-   
+
     @property
     def native_value(self) -> StateType:
         """Return the value reported by the sensor."""
@@ -132,3 +112,4 @@ class PulsarSensorEntity(BasePulsarEntity, SensorEntity):
             return None
 
         return value
+
